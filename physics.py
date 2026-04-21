@@ -1,49 +1,53 @@
 import math
-from settings import G, DT, EPS, MAX_DIST_SQ, TRAIL_LENGTH
+from settings import G, DT, EPS, MAX_DIST, TRAIL_LENGTH
+from pygame import Vector2
 
-def apply_gravity(p1, p2):
-    dx = p2.x - p1.x
-    dy = p2.y - p1.y
-
-    dist_sq = dx * dx + dy * dy + EPS * EPS
-    if dist_sq > MAX_DIST_SQ:
-        return
-
-    dist = math.sqrt(dist_sq)
-    force = G * p1.mass * p2.mass / dist_sq
-
+def get_distance(a,  b):
+    dx = b.x - a.x
+    dy = b.y - a.y
+    return math.sqrt((dx * dx + dy * dy + EPS * EPS))
+def update_velocity(planet1, planet2, distance):
+    dx = planet2.x - planet1.x
+    dy = planet2.y - planet1.y
+    force = G * planet1.mass * planet2.mass / (distance * distance)
     alpha = math.atan2(dy, dx)
     fx = force * math.cos(alpha)
     fy = force * math.sin(alpha)
 
-    p1.vx += fx / p1.mass * DT
-    p1.vy += fy / p1.mass * DT
-    p2.vx -= fx / p2.mass * DT
-    p2.vy -= fy / p2.mass * DT
+    planet1.vx += fx / planet1.mass * DT
+    planet1.vy += fy / planet1.mass * DT
+    planet2.vx -= fx / planet2.mass * DT
+    planet2.vy -= fy / planet2.mass * DT
 
-def update_position(p, show_trails):
-    p.x += p.vx * DT
-    p.y += p.vy * DT
+def apply_gravity(planet1, planet2):
+    distance = get_distance(Vector2 (planet1.x, planet1.y), Vector2(planet2.x, planet2.y))
+    if distance > MAX_DIST: return
+    update_velocity(planet1, planet2, distance)
+    
 
+def update_position(planet, show_trails):
+    planet.x += planet.vx * DT
+    planet.y += planet.vy * DT
     if show_trails:
-        p.trail.append((p.x, p.y))
-        if len(p.trail) > TRAIL_LENGTH:
-            p.trail.pop(0)
+        planet.trail.append((planet.x, planet.y))
+        if len(planet.trail) > TRAIL_LENGTH:
+            planet.trail.pop(0)
 
-def check_planet_collisions(planets):
+def check_collision_planets(planet1, planet2):
+    dx = planet2.x - planet1.x
+    dy = planet2.y - planet1.y
+    distance = get_distance(Vector2(planet1.x, planet1.y), Vector2(planet2.x, planet2.y))
+    min_dist = planet1.radius + planet2.radius
+    if distance < min_dist and distance > 0:
+        overlap = (min_dist - distance) / 2
+        nx = dx / distance
+        ny = dy / distance
+        planet1.x -= nx * overlap
+        planet1.y -= ny * overlap
+        planet2.x += nx * overlap
+        planet2.y += ny * overlap
+
+def update_collisions(planets):
     for i in range(len(planets) - 1):
         for j in range(i + 1, len(planets)):
-            p1 = planets[i]
-            p2 = planets[j]
-            dx = p2.x - p1.x
-            dy = p2.y - p1.y
-            dist = math.sqrt(dx*dx + dy*dy)
-            min_dist = p1.radius + p2.radius
-            if dist < min_dist and dist > 0:
-                overlap = (min_dist - dist) / 2
-                nx = dx / dist
-                ny = dy / dist
-                p1.x -= nx * overlap
-                p1.y -= ny * overlap
-                p2.x += nx * overlap
-                p2.y += ny * overlap
+            check_collision_planets(planets[i], planets[j])
