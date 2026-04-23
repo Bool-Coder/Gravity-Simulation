@@ -5,7 +5,7 @@ import random
 from settings import *
 import camera
 from planet import Planet
-from physics import apply_gravity, update_position, check_planet_collisions
+from physics import apply_gravity, update_position, update_collisions
 from grid import grid_surface, redraw_grid
 from ui import InputBox, font
 from menu import initialize_menu
@@ -166,13 +166,11 @@ while running:
 
     for p in planets:
         update_position(p, show_trails)
-
-    check_planet_collisions(planets)
-
+    
+    update_collisions(planets)
     if show_trails:
         for p in planets:
             p.draw_trail(screen)
-
     for p in planets:
         p.draw(screen)
 
