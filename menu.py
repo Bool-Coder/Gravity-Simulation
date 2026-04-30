@@ -23,7 +23,7 @@ def initialize_menu(planets, buttons, screen, set_scene):
         WIDTH / 2 - 180, 320,
         360, 80,
         function=lambda: set_scene("ARTEMIS-2-SIMULATION"),
-        text="ARTEMIS",
+        text="ARTEMIS 2",
         text_color=(0, 0, 0),
         background_color=(255, 255, 255)
     )

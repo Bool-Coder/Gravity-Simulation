@@ -136,7 +136,7 @@ while running:
                     random.randint(120, 255),
                 )
 
-                p = Planet(drag_start[0], drag_start[1], mass, radius, color)
+                p = Planet(drag_start[0], drag_start[1], mass, radius, color, len(planets) + 1)
                 p.vx = vx
                 p.vy = vy
                 planets.append(p)
@@ -174,7 +174,10 @@ while running:
             for p in planets:
                 p.draw_trail(screen)
         for p in planets:
+
             p.draw(screen)
+            p.draw_info(screen)
+
 
         # 🔹 UI BOXES
         mass_box.draw(screen)

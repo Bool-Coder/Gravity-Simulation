@@ -13,3 +13,5 @@ def screen_to_world(x, y):
     wx = (x - WIDTH // 2) / zoom + camera_x
     wy = (y - HEIGHT // 2) / zoom + camera_y
     return wx, wy
+def follow(target_x, target_y, speed=0.1):
+    pass

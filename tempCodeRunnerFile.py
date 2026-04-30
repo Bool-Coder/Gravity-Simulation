@@ -1,47 +1,58 @@
-    if len(planets) > 80:
-            show_trails = False
+import pygame
+import camera 
+from settings import WIDTH, HEIGHT, TRAIL_LENGTH
 
-        for i in range(len(planets) - 1):
-            for j in range(i + 1, len(planets)):
-                apply_gravity(planets[i], planets[j])
+class Planet:
+    def __init__(self, x, y, mass, radius, color):
+        self.x = x
+        self.y = y
+        self.vx = 0.0
+        self.vy = 0.0
+        self.mass = mass
+        self.radius = radius
+        self.color = color
+        self.trail = []
 
-        for p in planets:
-            update_position(p, show_trails)
-        
-        update_collisions(planets)
-        if show_trails:
-            for p in planets:
-                p.draw_trail(screen)
-        for p in planets:
-            p.draw(screen)
+        self.info_color = (255, 255, 255)
+        self.info_color_text = (0, 0, 0)
+        self.info = "Info Planet"
 
-        # 🔹 UI BOXES
-        mass_box.draw(screen)
-        radius_box.draw(screen)
+        self.info_rect = (0, 0, 100, 100)
+    
+    def planet_touching_mouse(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        dx = mouse_x - self.x
+        dy = mouse_y - self.y
+        return (dx * dx + dy * dy <= self.radius * self.radius)
+    def draw_info(self, screen):
+        if not self.planet_touching_mouse(): return
 
-        # 🔹 LABELS (restored)
-        screen.blit(font.render("Mass kg", True, WHITE), (10, 45))
-        screen.blit(font.render("Radius px", True, WHITE), (100, 45))
-        screen.blit(font.render(f"FPS: {int(fps)}", True, WHITE), (WIDTH - 100, 10))
-        screen.blit(font.render(f"Zoom: {camera.zoom:.2f}", True, WHITE), (WIDTH - 100, 30))
-        screen.blit(font.render("R reset", True, WHITE), (10, 85))
-        screen.blit(font.render("Q orbits on/off", True, WHITE), (10, 105))
-        screen.blit(font.render(f"Planets: {len(planets)}", True, WHITE), (10, 125))
+        sx, sy = camera.world_to_screen(self.x + 10, self.y + 15)
+        self.info_rect = (sx, sy, 150, 150)
+        pygame.draw.rect(screen, self.info_color, self.info_rect)
+    def draw_trail(self, screen):
+        if len(self.trail) < 2:
+            return
 
-        mouse_world_x, mouse_world_y = camera.screen_to_world(*pygame.mouse.get_pos())
-        pos_text = font.render(f"X: {mouse_world_x:.1f} Y: {mouse_world_y:.1f}", True, WHITE)
-        screen.blit(pos_text, (10, HEIGHT - 30))
+        points = []
+        cx = camera.camera_x
+        cy = camera.camera_y
+        z = camera.zoom
+        hw = WIDTH // 2
+        hh = HEIGHT // 2
 
-        
-        if dragging:
-            sx1, sy1 = camera.world_to_screen(*drag_start)
-            sx2, sy2 = camera.world_to_screen(*drag_end)
+        for wx, wy in self.trail:
+            sx = int((wx - cx) * z + hw)
+            sy = int((wy - cy) * z + hh)
+            points.append((sx, sy))
 
-            pygame.draw.circle(screen, WHITE, (sx1, sy1), 5)
-            pygame.draw.line(screen, WHITE, (sx1, sy1), (sx2, sy2), 2)
+        pygame.draw.lines(screen, self.color, False, points, 2)
 
-            dx = drag_start[0] - drag_end[0]
-            dy = drag_start[1] - drag_end[1]
-            speed = math.sqrt(dx * dx + dy * dy) * 0.5
-
-            screen.blit(font.render(f"v = {speed:.5f} px/s", True, WHITE), (sx1 + 10, sy1 + 10))
+    def draw(self, screen):
+        sx, sy = camera.world_to_screen(self.x, self.y)
+        pygame.draw.circle(
+            screen,
+            self.color,
+            (sx, sy),
+            max(1, int(self.radius * camera.zoom)) 
+        )
