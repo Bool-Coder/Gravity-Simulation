@@ -37,20 +37,24 @@ def check_collision_planets(planet1, planet2):
     dx = planet2.x - planet1.x
     dy = planet2.y - planet1.y
     distance = get_distance(Vector2(planet1.x, planet1.y), Vector2(planet2.x, planet2.y))
-    min_dist = planet1.radius + planet2.radius
+    min_dist = planet1.radius + planet2.radius + 1
     if distance < min_dist and distance > 0:
         nx, ny = dx / distance, dy / distance
 
         v1n = planet1.vx * nx + planet1.vy * ny
         v2n = planet2.vx * nx + planet2.vy * ny
-        e = 1
+        e = 0
         v1n_new = (planet1.mass * v1n + planet2.mass * v2n - planet2.mass * e * (v1n - v2n)) / (planet1.mass + planet2.mass)
         v2n_new = (planet1.mass * v1n + planet2.mass * v2n + planet1.mass * e * (v1n - v2n)) / (planet1.mass + planet2.mass)
 
-        planet1.vx += (v1n_new - v1n) * nx
-        planet1.vy += (v1n_new - v1n) * ny
-        planet2.vx += (v2n_new - v2n) * nx
-        planet2.vy += (v2n_new - v2n) * ny
+        #planet1.vx += (v1n_new - v1n) * nx
+        #planet1.vy += (v1n_new - v1n) * ny
+        #planet2.vx += (v2n_new - v2n) * nx
+        #planet2.vy += (v2n_new - v2n) * ny
+        planet1.vx = 0
+        planet1.vy = 0
+        planet2.vx = 0
+        planet2.vy = 0
 
 def update_collisions(planets):
     for i in range(len(planets) - 1):
