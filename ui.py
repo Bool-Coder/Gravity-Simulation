@@ -3,6 +3,8 @@ from settings import GRAY, LIGHT_GRAY, WHITE
 
 pygame.font.init()
 font = pygame.font.SysFont("consolas", 18)
+menu_button_font = pygame.font.SysFont("consolas", 40)
+
 
 class InputBox:
     def __init__(self, x, y, w, h, text=''):
