@@ -1,8 +1,62 @@
 from planet import Planet
-from button import Button
-from settings import WIDTH, HEIGHT
+from ui import *
+from settings import WIDTH, HEIGHT, BLACK, WHITE
 
-def initialize_menu(planets, buttons, screen, set_scene):
+
+def draw_menu_ui(screen):
+    screen.blit(
+            font2.render("GRAVICODE", True, WHITE),
+            (WIDTH / 2 - 120, 100)
+        )
+
+    screen.blit(
+            font.render(
+                "AUTHOR: TIMOFEI FILIP EMANUEL -> 8C",
+                True,
+                WHITE
+            ),
+            (30, HEIGHT - 60)
+        )
+
+    screen.blit(
+            font.render(
+                "AUTHOR: BUNGHEZ ANDREI -> 6C",
+                True,
+                WHITE
+            ),
+            (30, HEIGHT - 40)
+        )
+
+    screen.blit(
+            font.render(
+                "TEACHER 1: RADU SIMONA",
+                True,
+                WHITE
+            ),
+            (WIDTH - 260, HEIGHT - 80)
+        )
+
+    screen.blit(
+            font.render(
+                "TEACHER 2: DOBRIN FLORIN",
+                True,
+                WHITE
+            ),
+            (WIDTH - 260, HEIGHT - 60)
+        )
+
+    screen.blit(
+            font.render(
+                "TEACHER 3: MEMET EDEN",
+                True,
+                WHITE
+            ),
+            (WIDTH - 260, HEIGHT - 40)
+        )
+
+
+
+def initialize_menu(planets, buttons, screen, set_scene, create_solar_system):
     planets.clear()
     buttons.clear()
 
@@ -10,10 +64,10 @@ def initialize_menu(planets, buttons, screen, set_scene):
         screen,
         WIDTH / 2 - 180, 200,
         360, 80,
-        function=lambda: set_scene("SIMULATION"),
+        function=lambda: set_scene("OPEN-SIMULATION"),
         text="Open simulation",
-        text_color=(0, 0, 0),
-        background_color=(255, 255, 255)
+        text_color=BLACK,
+        background_color=WHITE
     )
 
     buttons.append(b)
@@ -24,8 +78,8 @@ def initialize_menu(planets, buttons, screen, set_scene):
         360, 80,
         function=lambda: set_scene("ARTEMIS-2-SIMULATION"),
         text="ARTEMIS 2",
-        text_color=(0, 0, 0),
-        background_color=(255, 255, 255)
+        text_color=BLACK,
+        background_color=WHITE
     )
 
     buttons.append(b)
@@ -34,25 +88,10 @@ def initialize_menu(planets, buttons, screen, set_scene):
         screen,
         WIDTH / 2 - 180, 440,
         360, 80,
-        function=lambda: set_scene("SOLAR-SYSTEM-SIMULATION"),
+        function=lambda: create_solar_system(),
         text="SOLAR SYSTEM",
-        text_color=(0, 0, 0),
-        background_color=(255, 255, 255)
+        text_color=BLACK,
+        background_color=WHITE
     )
 
     buttons.append(b)
-
-    # p = Planet(0, 0, 5000, 50, (255, 255, 0))
-    # planets.append(p)
-
-    # p = Planet(0, 250, 10, 7, (255, 0, 0))
-    # p.vx = 60
-    # planets.append(p)
-
-    # p = Planet(450, 0, 15, 10, (0, 255, 0))
-    # p.vy = -60
-    # planets.append(p)
-
-    # p = Planet(0, -250, 10, 7, (0, 0, 255))
-    # p.vx = -60
-    # planets.append(p)
