@@ -76,6 +76,9 @@ def set_scene(new_scene):
 
 def create_solar_system():
     global scene, planets, buttons
+    buttons.clear()
+    planets.clear()
+    
     menu_button = Button(
             screen,
             WIDTH - 75,
@@ -91,8 +94,8 @@ def create_solar_system():
 
     buttons.append(menu_button)
     
-    planets.clear()
-    buttons.clear()
+    
+    
     scene = "SOLAR-SYSTEM-SIMULATION"
     planets.clear()
 
