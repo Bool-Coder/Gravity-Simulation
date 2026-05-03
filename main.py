@@ -112,6 +112,8 @@ while running:
             if camera.zoom_camera(event): redraw_grid()
         if gv.scene == "SOLAR-SYSTEM-SIMULATION" and event.type == pygame.KEYDOWN and event.key == pygame.K_q:
             show_trails = not show_trails
+        if gv.scene == "SOLAR-SYSTEM-SIMULATION" and event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            show_trails = not show_trails
         if event.type == pygame.KEYDOWN and gv.scene == "OPEN-SIMULATION":
 
             if event.key == pygame.K_r:
@@ -156,7 +158,7 @@ while running:
         update_solar_system_simulation(gv.screen, gv.planets, show_trails)
     elif gv.scene == "ARTEMIS-2-SIMULATION":
         draw_artemis_2_simulation_ui(gv.screen, gv.planets, fps)
-        update_artemis_2_simulation(gv.set_scene, gv.planets, fps)
+        update_artemis_2_simulation(gv.screen, gv.planets, fps)
     
     pygame.display.flip()
 

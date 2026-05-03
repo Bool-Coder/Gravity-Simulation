@@ -2,7 +2,7 @@ import pygame
 
 WIDTH, HEIGHT = 1200, 800
 G = 400
-DT = 1 / 120
+DT = 1 / 60
 EPS = 2
 MAX_DIST = 2000 * 2000
 

@@ -27,9 +27,7 @@ def create_artemis_2_simulation():
     gv.buttons.append(menu_button)
     gv.scene = "ARTEMIS-2-SIMULATION"
 
-    # ---------------- SUN ----------------
 
-    redraw_grid()
 
 
 def draw_artemis_2_simulation_ui(screen, planets, fps):
