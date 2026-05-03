@@ -35,7 +35,7 @@ def create_artemis_2_simulation():
 def draw_artemis_2_simulation_ui(screen, planets, fps):
     screen.blit(
         font.render("Q orbits on/off", True, WHITE),
-        (10, 105)
+        (10, 15)
     )
     screen.blit(
         font.render(f"FPS: {int(fps)}", True, WHITE),
