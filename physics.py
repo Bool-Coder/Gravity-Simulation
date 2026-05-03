@@ -2,6 +2,25 @@ import math
 from settings import G, DT, EPS, MAX_DIST, TRAIL_LENGTH
 from pygame import Vector2
 
+def get_speed(planet):
+    return (planet.vx**2 + planet.vy**2) ** 0.5
+
+def update_energy(planet, planets):
+    speed = get_speed(planet)
+    planet.kinetic_energy = 0.5 * planet.mass * speed**2
+    planet.potential_energy = 0
+
+    for p in planets:
+        if p is planet:
+            continue
+        dx = planet.x - p.x
+        dy = planet.y - p.y
+        r = (dx*dx + dy*dy) ** 0.5 + EPS
+
+        planet.potential_energy += -G * planet.mass * p.mass / r
+
+    planet.total_energy = planet.kinetic_energy + planet.potential_energy
+
 def get_distance(a,  b):
     dx = b.x - a.x
     dy = b.y - a.y
@@ -28,10 +47,10 @@ def apply_gravity(planet1, planet2):
 def update_position(planet, show_trails):
     planet.x += planet.vx * DT
     planet.y += planet.vy * DT
-    if show_trails:
-        planet.trail.append((planet.x, planet.y))
-        if len(planet.trail) > TRAIL_LENGTH:
-            planet.trail.pop(0)
+    
+    planet.trail.append((planet.x, planet.y))
+    if len(planet.trail) > TRAIL_LENGTH:
+        planet.trail.pop(0)
 
 def check_collision_planets(planet1, planet2):
     dx = planet2.x - planet1.x
@@ -56,3 +75,13 @@ def update_collisions(planets):
     for i in range(len(planets) - 1):
         for j in range(i + 1, len(planets)):
             check_collision_planets(planets[i], planets[j])
+def calculate_drag_velocity(drag_start, drag_end):
+    dx = drag_start[0] - drag_end[0]
+    dy = drag_start[1] - drag_end[1]
+
+    vx = dx * 0.5
+    vy = dy * 0.5
+
+    speed = math.sqrt(dx * dx + dy * dy) * 0.5
+
+    return vx, vy, speed
