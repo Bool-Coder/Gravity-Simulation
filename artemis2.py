@@ -27,6 +27,42 @@ def create_artemis_2_simulation():
     gv.buttons.append(menu_button)
     gv.scene = "ARTEMIS-2-SIMULATION"
 
+    # ---------------- Earth ----------------
+    earth = Planet(
+        0, 0,
+        5000,
+        100,
+        (80, 120, 255),
+        "Earth"
+    )
+    earth.vx = 0
+    earth.vy = 0
+    gv.planets.append(earth)
+
+    # ---------------- Moon ----------------
+    moon = Planet(
+        500, -200,
+        500,
+        30,
+        (220, 220, 220),
+        "Moon"
+    )
+    moon.vx = 0
+    moon.vy = 60
+    gv.planets.append(moon)
+
+    # ---------------- Artemis ----------------
+    artemis = Planet(
+        100, 200,
+        1,
+        10,
+        (220, 0, 0),
+        "Artemis"
+    )
+    artemis.vx = 100
+    artemis.vy = 0
+    gv.planets.append(artemis)
+
 
 
 
@@ -65,7 +101,8 @@ def update_artemis_2_simulation(screen, planets, show_trails):
             apply_gravity(planets[i], planets[j])
     for p in planets:
         update_energy(p, planets)
-        update_position(p, show_trails)
+        if p.id != "Earth":
+            update_position(p, show_trails)
     update_collisions(planets)
     if show_trails:
         for p in planets:
