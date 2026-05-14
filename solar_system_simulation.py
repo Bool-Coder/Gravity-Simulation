@@ -108,7 +108,8 @@ def update_solar_system_simulation(screen, planets, show_trails):
             apply_gravity(planets[i], planets[j])
     for p in planets:
         update_energy(p, planets)
-        update_position(p, show_trails)
+        if p.id != "Sun":
+            update_position(p, show_trails)
     update_collisions(planets)
     if show_trails:
         for p in planets:
